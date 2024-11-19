@@ -1,0 +1,28 @@
+services:
+  db:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracle-free
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PWD: Test123
+    networks:
+      - ora-network
+    volumes:
+      - /opt/oracle/oradata/free:/opt/oracle/oradata/free
+
+  app:
+    image: webapidotnet9:latest
+    container_name: webapidotnet9
+    environment:
+      ASPNET_ENVIRONMENT: Production
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - ora-network
+
+networks:
+  ora-network:
+    driver: bridge
